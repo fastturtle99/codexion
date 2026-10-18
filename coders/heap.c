@@ -6,7 +6,7 @@
 /*   By: anasufi <anasufi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/18 06:52:29 by anasufi           #+#    #+#             */
-/*   Updated: 2026/10/18 07:31:31 by anasufi          ###   ########.fr       */
+/*   Updated: 2026/10/19 00:23:45 by anasufi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,5 +75,6 @@ int	heap_remove(int *heap, int *size, int *removed)
 	if (*size == 0)
 		return (0);
 	heap[0] = heap[*size];
-	// Bubble-down logic goes here next.
+	heap_sift_down(heap, *size);
+	return (0);
 }

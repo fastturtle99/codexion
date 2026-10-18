@@ -6,7 +6,7 @@
 /*   By: anasufi <anasufi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/18 06:52:43 by anasufi           #+#    #+#             */
-/*   Updated: 2026/10/19 00:09:34 by anasufi          ###   ########.fr       */
+/*   Updated: 2026/10/19 00:27:26 by anasufi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,18 +15,17 @@
 
 int	main(void)
 {
-	int	heap[10] = {300, 400, 700, 900, 500};
+	int	heap[3] = {42, 0, 0};
 	int	size;
-	int	i;
+	int	removed;
+	int	result;
 
-	size = 5;
-	heap_insert(heap, &size, 10, 200);
-	i = 0;
-	while (i < size)
-	{
-		printf("%d ", heap[i]);
-		i++;
-	}
-	printf("\n");
+	size = 1;
+	result = heap_remove(heap, &size, &removed);
+	printf("First removal: %d\n", result);
+	printf("Removed value: %d\n", removed);
+	printf("Heap size: %d\n", size);
+	result = heap_remove(heap, &size, &removed);
+	printf("Second removal: %d\n", result);
 	return (0);
 }
