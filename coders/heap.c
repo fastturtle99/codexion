@@ -6,7 +6,7 @@
 /*   By: anasufi <anasufi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/18 06:52:29 by anasufi           #+#    #+#             */
-/*   Updated: 2026/10/19 00:23:45 by anasufi          ###   ########.fr       */
+/*   Updated: 2026/10/19 01:24:21 by anasufi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,15 @@
 void	swap(int *a, int *b)
 {
 	int	temp;
+
+	temp = *a;
+	*a = *b;
+	*b = temp;
+}
+
+void	request_swap(t_request *a, t_request *b)
+{
+	t_request	temp;
 
 	temp = *a;
 	*a = *b;

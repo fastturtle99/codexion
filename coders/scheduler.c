@@ -6,7 +6,7 @@
 /*   By: anasufi <anasufi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/19 01:15:51 by anasufi           #+#    #+#             */
-/*   Updated: 2026/10/19 01:16:02 by anasufi          ###   ########.fr       */
+/*   Updated: 2026/10/19 01:32:44 by anasufi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,4 +22,11 @@ int	edf_before(t_request a, t_request b)
 	if (a.deadline == b.deadline)
 		return (a.arrival_order < b.arrival_order);
 	return (a.deadline < b.deadline);
+}
+
+int	request_before(t_request a, t_request b, t_scheduler scheduler)
+{
+	if (scheduler == SCHEDULER_FIFO)
+		return (fifo_before(a, b));
+	return (edf_before(a, b));
 }
