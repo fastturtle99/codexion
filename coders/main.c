@@ -6,7 +6,7 @@
 /*   By: anasufi <anasufi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/18 06:52:43 by anasufi           #+#    #+#             */
-/*   Updated: 2026/10/19 00:27:26 by anasufi          ###   ########.fr       */
+/*   Updated: 2026/10/20 06:17:01 by anasufi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,17 +15,26 @@
 
 int	main(void)
 {
-	int	heap[3] = {42, 0, 0};
-	int	size;
-	int	removed;
-	int	result;
+	t_request	a;
+	t_request	b;
+	t_request	items[3];
+	t_heap		heap;
 
-	size = 1;
-	result = heap_remove(heap, &size, &removed);
-	printf("First removal: %d\n", result);
-	printf("Removed value: %d\n", removed);
-	printf("Heap size: %d\n", size);
-	result = heap_remove(heap, &size, &removed);
-	printf("Second removal: %d\n", result);
+	a = (t_request){1, 100, 900, 1};
+	b = (t_request){2, 150, 600, 2};
+	heap.items = items;
+	heap.size = 0;
+	heap.capacity = 3;
+	heap.scheduler = SCHEDULER_FIFO;
+	if (heap_push(&heap, a) != 0)
+	{
+		return (1);
+	}
+	if (heap_push(&heap, b) != 0)
+	{
+		return (1);
+	}
+	printf("Root: Coder %d, deadline %lld\n", heap.items[0].coder_id,
+		heap.items[0].deadline);
 	return (0);
 }

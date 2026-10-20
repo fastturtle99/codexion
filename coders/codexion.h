@@ -6,7 +6,7 @@
 /*   By: anasufi <anasufi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/18 06:52:40 by anasufi           #+#    #+#             */
-/*   Updated: 2026/10/19 01:35:29 by anasufi          ###   ########.fr       */
+/*   Updated: 2026/10/20 06:11:47 by anasufi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,5 +43,6 @@ int					edf_before(t_request a, t_request b);
 void				request_swap(t_request *a, t_request *b);
 int					request_before(t_request a, t_request b,
 						t_scheduler scheduler);
+int					heap_push(t_heap *heap, t_request request);
 
 #endif
