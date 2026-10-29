@@ -6,7 +6,7 @@
 #    By: anasufi <anasufi@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/10/18 07:01:36 by anasufi           #+#    #+#              #
-#    Updated: 2026/10/21 05:40:44 by anasufi          ###   ########.fr        #
+#    Updated: 2026/10/29 07:29:43 by anasufi          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,13 @@ NAME = codexion
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -pthread
 
-SRC = main.c heap.c scheduler.c request_heap.c request_heap_pop.c
+SRC = main.c \
+      heap.c \
+      scheduler.c \
+      request_heap.c \
+      request_heap_pop.c \
+      parsing.c
+
 OBJ = $(SRC:.c=.o)
 
 all: $(NAME)

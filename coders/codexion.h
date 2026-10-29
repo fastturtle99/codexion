@@ -6,7 +6,7 @@
 /*   By: anasufi <anasufi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/18 06:52:40 by anasufi           #+#    #+#             */
-/*   Updated: 2026/10/21 05:40:36 by anasufi          ###   ########.fr       */
+/*   Updated: 2026/10/29 07:34:19 by anasufi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,5 +45,7 @@ int					request_before(t_request a, t_request b,
 						t_scheduler scheduler);
 int					heap_push(t_heap *heap, t_request request);
 int					heap_pop(t_heap *heap, t_request *removed);
+int					is_valid_number(const char *str);
+int					validate_numbers(char **argv);
 
 #endif
