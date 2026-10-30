@@ -6,7 +6,7 @@
 #    By: anasufi <anasufi@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/10/18 07:01:36 by anasufi           #+#    #+#              #
-#    Updated: 2026/10/29 07:29:43 by anasufi          ###   ########.fr        #
+#    Updated: 2026/10/30 17:43:21 by anasufi          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,8 @@ SRC = main.c \
       scheduler.c \
       request_heap.c \
       request_heap_pop.c \
-      parsing.c
+      parsing.c \
+      config.c
 
 OBJ = $(SRC:.c=.o)
 

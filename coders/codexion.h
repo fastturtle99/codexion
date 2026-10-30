@@ -6,7 +6,7 @@
 /*   By: anasufi <anasufi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/18 06:52:40 by anasufi           #+#    #+#             */
-/*   Updated: 2026/10/29 07:34:19 by anasufi          ###   ########.fr       */
+/*   Updated: 2026/10/30 17:42:43 by anasufi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,18 @@ typedef enum e_scheduler
 	SCHEDULER_FIFO,
 	SCHEDULER_EDF
 }					t_scheduler;
+
+typedef struct s_config
+{
+	int				number_of_coders;
+	int				time_to_burnout;
+	int				time_to_compile;
+	int				time_to_debug;
+	int				time_to_refactor;
+	int				number_of_compiles_required;
+	int				dongle_cooldown;
+	t_scheduler		scheduler;
+}					t_config;
 
 typedef struct s_heap
 {
@@ -47,5 +59,7 @@ int					heap_push(t_heap *heap, t_request request);
 int					heap_pop(t_heap *heap, t_request *removed);
 int					is_valid_number(const char *str);
 int					validate_numbers(char **argv);
+int					is_valid_coder_count(char *str);
+void				load_config(t_config *config, char **argv);
 
 #endif
