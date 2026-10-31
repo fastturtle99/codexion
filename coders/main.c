@@ -6,7 +6,7 @@
 /*   By: anasufi <anasufi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/18 06:52:43 by anasufi           #+#    #+#             */
-/*   Updated: 2026/10/30 17:47:10 by anasufi          ###   ########.fr       */
+/*   Updated: 2026/10/31 06:10:18 by anasufi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,5 +36,6 @@ int	main(int argc, char **argv)
 	printf("Number of coders: %d", config.number_of_coders);
 	printf("Burnout: %d ms\n", config.time_to_burnout);
 	printf("Argument count and first number are valid!\n");
+	return (start_first_coder(&config));
 	return (0);
 }

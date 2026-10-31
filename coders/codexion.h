@@ -6,12 +6,14 @@
 /*   By: anasufi <anasufi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/18 06:52:40 by anasufi           #+#    #+#             */
-/*   Updated: 2026/10/30 17:42:43 by anasufi          ###   ########.fr       */
+/*   Updated: 2026/10/31 06:09:37 by anasufi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CODEXION_H
 # define CODEXION_H
+
+# include <pthread.h>
 
 typedef struct s_request
 {
@@ -47,6 +49,13 @@ typedef struct s_heap
 	t_scheduler		scheduler;
 }					t_heap;
 
+typedef struct s_coder
+{
+	int				id;
+	pthread_t		thread;
+	t_config		*config;
+}					t_coder;
+
 void				swap(int *a, int *b);
 int					heap_insert(int *heap, int *size, int capacity, int value);
 int					heap_remove(int *heap, int *size, int *removed);
@@ -61,5 +70,6 @@ int					is_valid_number(const char *str);
 int					validate_numbers(char **argv);
 int					is_valid_coder_count(char *str);
 void				load_config(t_config *config, char **argv);
+int					start_first_coder(t_config *config);
 
 #endif
