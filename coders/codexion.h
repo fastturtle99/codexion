@@ -6,7 +6,7 @@
 /*   By: anasufi <anasufi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/18 06:52:40 by anasufi           #+#    #+#             */
-/*   Updated: 2026/10/31 06:09:37 by anasufi          ###   ########.fr       */
+/*   Updated: 2026/11/02 22:40:18 by anasufi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,11 +49,20 @@ typedef struct s_heap
 	t_scheduler		scheduler;
 }					t_heap;
 
+typedef struct s_dongle
+{
+	pthread_mutex_t	mutex;
+	long long		cooldown_until;
+}					t_dongle;
+
 typedef struct s_coder
 {
 	int				id;
 	pthread_t		thread;
 	t_config		*config;
+	t_dongle		*dongles;
+	int				left_index;
+	int				right_index;
 }					t_coder;
 
 void				swap(int *a, int *b);
@@ -70,6 +79,10 @@ int					is_valid_number(const char *str);
 int					validate_numbers(char **argv);
 int					is_valid_coder_count(char *str);
 void				load_config(t_config *config, char **argv);
-int					start_first_coder(t_config *config);
+int					start_coders(t_config *config);
+int					is_valid_scheduler(const char *str);
+int					init_dongles(t_dongle *dongles, int count);
+void				destroy_dongles(t_dongle *dongles, int count);
+t_dongle			*alloc_dongles(int count);
 
 #endif

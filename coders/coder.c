@@ -6,12 +6,13 @@
 /*   By: anasufi <anasufi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/31 06:06:03 by anasufi           #+#    #+#             */
-/*   Updated: 2026/10/31 06:06:09 by anasufi          ###   ########.fr       */
+/*   Updated: 2026/11/02 22:04:32 by anasufi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 static void	*coder_routine(void *arg)
 {
@@ -23,15 +24,67 @@ static void	*coder_routine(void *arg)
 	return (NULL);
 }
 
-int	start_first_coder(t_config *config)
+static int	create_coders(t_coder *coders, t_config *config, t_dongle *dongles)
 {
-	t_coder	coder;
+	int	i;
 
-	coder.id = 1;
-	coder.config = config;
-	if (pthread_create(&coder.thread, NULL, coder_routine, &coder) != 0)
+	i = 0;
+	while (i < config->number_of_coders)
+	{
+		coders[i].id = i + 1;
+		coders[i].config = config;
+		coders[i].dongles = dongles;
+		if (pthread_create(&coders[i].thread, NULL, coder_routine,
+				&coders[i]) != 0)
+		{
+			break ;
+		}
+		i++;
+	}
+	return (i);
+}
+
+static int	join_coders(t_coder *coders, int count)
+{
+	int	i;
+	int	failed;
+
+	i = 0;
+	failed = 0;
+	while (i < count)
+	{
+		if (pthread_join(coders[i].thread, NULL) != 0)
+		{
+			failed = 1;
+		}
+		i++;
+	}
+	return (failed);
+}
+
+int	start_coders(t_config *config)
+{
+	t_coder		*coders;
+	t_dongle	*dongles;
+	int			created;
+	int			failed;
+
+	coders = malloc(sizeof(t_coder) * config->number_of_coders);
+	if (!coders)
 		return (1);
-	if (pthread_join(coder.thread, NULL) != 0)
+	dongles = alloc_dongles(config->number_of_coders);
+	if (!dongles)
+	{
+		free(coders);
 		return (1);
-	return (0);
+	}
+	created = create_coders(coders, config, dongles);
+	failed = join_coders(coders, created);
+	if (!failed)
+	{
+		destroy_dongles(dongles, config->number_of_coders);
+		free(dongles);
+		free(coders);
+	}
+	return (created != config->number_of_coders || failed);
 }
