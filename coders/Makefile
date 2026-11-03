@@ -6,7 +6,7 @@
 #    By: anasufi <anasufi@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/10/18 07:01:36 by anasufi           #+#    #+#              #
-#    Updated: 2026/11/02 20:07:34 by anasufi          ###   ########.fr        #
+#    Updated: 2026/11/03 18:16:18 by anasufi          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,9 @@ SRC = main.c \
       parsing.c \
       config.c \
 	  coder.c \
-	  dongles.c
+	  dongles.c \
+	  coordinator.c \
+	  time_utils.c
 
 OBJ = $(SRC:.c=.o)
 

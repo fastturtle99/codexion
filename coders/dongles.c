@@ -6,7 +6,7 @@
 /*   By: anasufi <anasufi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/02 20:01:15 by anasufi           #+#    #+#             */
-/*   Updated: 2026/11/02 21:57:15 by anasufi          ###   ########.fr       */
+/*   Updated: 2026/11/02 23:22:43 by anasufi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ int	init_dongles(t_dongle *dongles, int count)
 	while (i < count)
 	{
 		dongles[i].cooldown_until = 0;
+		dongles[i].in_use = 0;
 		if (pthread_mutex_init(&dongles[i].mutex, NULL) != 0)
 		{
 			destroy_dongles(dongles, i);

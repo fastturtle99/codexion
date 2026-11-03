@@ -6,7 +6,7 @@
 /*   By: anasufi <anasufi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/18 06:52:40 by anasufi           #+#    #+#             */
-/*   Updated: 2026/11/02 22:40:18 by anasufi          ###   ########.fr       */
+/*   Updated: 2026/11/03 19:59:57 by anasufi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,14 @@ typedef struct s_dongle
 {
 	pthread_mutex_t	mutex;
 	long long		cooldown_until;
+	int				in_use;
 }					t_dongle;
+
+typedef struct s_coordinator
+{
+	pthread_mutex_t	mutex;
+	t_dongle		*dongles;
+}					t_coordinator;
 
 typedef struct s_coder
 {
@@ -84,5 +91,10 @@ int					is_valid_scheduler(const char *str);
 int					init_dongles(t_dongle *dongles, int count);
 void				destroy_dongles(t_dongle *dongles, int count);
 t_dongle			*alloc_dongles(int count);
+int					init_coordinator(t_coordinator *coord, t_dongle *dongles);
+void				destroy_coordinator(t_coordinator *coord);
+long long			get_time_ms(void);
+int					release_pair(t_coordinator *coord, int left, int right,
+						int cooldown_ms);
 
 #endif

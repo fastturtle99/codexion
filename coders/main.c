@@ -6,7 +6,7 @@
 /*   By: anasufi <anasufi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/18 06:52:43 by anasufi           #+#    #+#             */
-/*   Updated: 2026/11/02 08:23:08 by anasufi          ###   ########.fr       */
+/*   Updated: 2026/11/03 18:17:10 by anasufi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,5 +45,6 @@ int	main(int argc, char **argv)
 	if (!validate_input(argc, argv))
 		return (1);
 	load_config(&config, argv);
+	printf("Current time: %lld ms\n", get_time_ms());
 	return (start_coders(&config));
 }
