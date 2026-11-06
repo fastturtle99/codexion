@@ -6,7 +6,7 @@
 /*   By: anasufi <anasufi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/18 06:52:40 by anasufi           #+#    #+#             */
-/*   Updated: 2026/11/03 19:59:57 by anasufi          ###   ########.fr       */
+/*   Updated: 2026/11/06 02:07:32 by anasufi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ typedef struct s_coder
 	pthread_t		thread;
 	t_config		*config;
 	t_dongle		*dongles;
+	t_coordinator	*coordinator;
 	int				left_index;
 	int				right_index;
 }					t_coder;

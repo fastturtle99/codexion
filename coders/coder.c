@@ -6,7 +6,7 @@
 /*   By: anasufi <anasufi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/31 06:06:03 by anasufi           #+#    #+#             */
-/*   Updated: 2026/11/02 22:45:05 by anasufi          ###   ########.fr       */
+/*   Updated: 2026/11/06 02:21:01 by anasufi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ static void	*coder_routine(void *arg)
 	return (NULL);
 }
 
-static int	create_coders(t_coder *coders, t_config *config, t_dongle *dongles)
+static int	create_coders(t_coder *coders, t_config *config, t_dongle *dongles,
+		t_coordinator *coord)
 {
 	int	i;
 
@@ -36,6 +37,7 @@ static int	create_coders(t_coder *coders, t_config *config, t_dongle *dongles)
 		coders[i].id = i + 1;
 		coders[i].config = config;
 		coders[i].dongles = dongles;
+		coders[i].coordinator = coord;
 		coders[i].right_index = i;
 		if (i == 0)
 			coders[i].left_index = config->number_of_coders - 1;
@@ -71,10 +73,11 @@ static int	join_coders(t_coder *coders, int count)
 
 int	start_coders(t_config *config)
 {
-	t_coder		*coders;
-	t_dongle	*dongles;
-	int			created;
-	int			failed;
+	t_coder			*coders;
+	t_dongle		*dongles;
+	t_coordinator	*coord;
+	int				created;
+	int				failed;
 
 	coders = malloc(sizeof(t_coder) * config->number_of_coders);
 	if (!coders)
@@ -85,11 +88,21 @@ int	start_coders(t_config *config)
 		free(coders);
 		return (1);
 	}
-	created = create_coders(coders, config, dongles);
+	coord = malloc(sizeof(t_coordinator));
+	if (!coord)
+	{
+		destroy_dongles(dongles, config->number_of_coders);
+		free(dongles);
+		free(coders);
+		return (1);
+	}
+	created = create_coders(coders, config, dongles, coord);
 	failed = join_coders(coders, created);
 	if (!failed)
 	{
+		destroy_coordinator(coord);
 		destroy_dongles(dongles, config->number_of_coders);
+		free(coord);
 		free(dongles);
 		free(coders);
 	}
