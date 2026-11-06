@@ -6,7 +6,7 @@
 /*   By: anasufi <anasufi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/18 06:52:40 by anasufi           #+#    #+#             */
-/*   Updated: 2026/11/06 02:07:32 by anasufi          ###   ########.fr       */
+/*   Updated: 2026/11/06 23:38:14 by anasufi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,14 @@ typedef struct s_coder
 	int				right_index;
 }					t_coder;
 
+typedef struct s_simulation
+{
+	t_coder			*coders;
+	t_dongle		*dongles;
+	t_coordinator	coord;
+	t_config		*config;
+}					t_simulation;
+
 void				swap(int *a, int *b);
 int					heap_insert(int *heap, int *size, int capacity, int value);
 int					heap_remove(int *heap, int *size, int *removed);
@@ -95,7 +103,10 @@ t_dongle			*alloc_dongles(int count);
 int					init_coordinator(t_coordinator *coord, t_dongle *dongles);
 void				destroy_coordinator(t_coordinator *coord);
 long long			get_time_ms(void);
+int					reserve_pair(t_coordinator *coord, int left, int right);
 int					release_pair(t_coordinator *coord, int left, int right,
 						int cooldown_ms);
+int					init_simulation(t_simulation *sim, t_config *config);
+void				destroy_simulation(t_simulation *sim);
 
 #endif

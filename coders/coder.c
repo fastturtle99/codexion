@@ -6,23 +6,34 @@
 /*   By: anasufi <anasufi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/31 06:06:03 by anasufi           #+#    #+#             */
-/*   Updated: 2026/11/06 02:21:01 by anasufi          ###   ########.fr       */
+/*   Updated: 2026/11/06 23:41:53 by anasufi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 static void	*coder_routine(void *arg)
 {
 	t_coder	*coder;
 
 	coder = (t_coder *)arg;
-	// printf("Coder %d started (out of %d)\n", coder->id,
-	// 	coder->config->number_of_coders);
-	printf("Coder %d needs dongles D%d and D%d\n", coder->id, coder->left_index,
+	if (!reserve_pair(coder->coordinator, coder->left_index,
+			coder->right_index))
+	{
+		printf("Coder %d: dongles unavailable\n", coder->id);
+		return (NULL);
+	}
+	printf("Coder %d reserved D%d and D%d\n", coder->id, coder->left_index,
 		coder->right_index);
+	usleep(50000);
+	if (release_pair(coder->coordinator, coder->left_index, coder->right_index,
+			coder->config->dongle_cooldown) != 0)
+		printf("Coder %d: release failed\n", coder->id);
+	else
+		printf("Coder %d released its dongles\n", coder->id);
 	return (NULL);
 }
 
@@ -73,38 +84,15 @@ static int	join_coders(t_coder *coders, int count)
 
 int	start_coders(t_config *config)
 {
-	t_coder			*coders;
-	t_dongle		*dongles;
-	t_coordinator	*coord;
+	t_simulation	sim;
 	int				created;
 	int				failed;
 
-	coders = malloc(sizeof(t_coder) * config->number_of_coders);
-	if (!coders)
+	if (init_simulation(&sim, config) != 0)
 		return (1);
-	dongles = alloc_dongles(config->number_of_coders);
-	if (!dongles)
-	{
-		free(coders);
-		return (1);
-	}
-	coord = malloc(sizeof(t_coordinator));
-	if (!coord)
-	{
-		destroy_dongles(dongles, config->number_of_coders);
-		free(dongles);
-		free(coders);
-		return (1);
-	}
-	created = create_coders(coders, config, dongles, coord);
-	failed = join_coders(coders, created);
+	created = create_coders(sim.coders, sim.config, sim.dongles, &sim.coord);
+	failed = join_coders(sim.coders, created);
 	if (!failed)
-	{
-		destroy_coordinator(coord);
-		destroy_dongles(dongles, config->number_of_coders);
-		free(coord);
-		free(dongles);
-		free(coders);
-	}
+		destroy_simulation(&sim);
 	return (created != config->number_of_coders || failed);
 }
