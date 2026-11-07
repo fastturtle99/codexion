@@ -6,23 +6,35 @@
 /*   By: anasufi <anasufi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/02 23:29:16 by anasufi           #+#    #+#             */
-/*   Updated: 2026/11/03 20:07:07 by anasufi          ###   ########.fr       */
+/*   Updated: 2026/11/07 01:21:24 by anasufi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
+#include <stdlib.h>
 
-int	init_coordinator(t_coordinator *coord, t_dongle *dongles)
+int	init_coordinator(t_coordinator *coord, t_dongle *dongles, t_config *config)
 {
 	coord->dongles = dongles;
-	if (pthread_mutex_init(&coord->mutex, NULL) != 0)
+	coord->waiting.size = 0;
+	coord->waiting.capacity = config->number_of_coders;
+	coord->waiting.scheduler = config->scheduler;
+	coord->next_arrival = 0;
+	coord->waiting.items = malloc(sizeof(t_request) * config->number_of_coders);
+	if (!coord->waiting.items)
 		return (1);
+	if (pthread_mutex_init(&coord->mutex, NULL) != 0)
+	{
+		free(coord->waiting.items);
+		return (1);
+	}
 	return (0);
 }
 
 void	destroy_coordinator(t_coordinator *coord)
 {
 	pthread_mutex_destroy(&coord->mutex);
+	free(coord->waiting.items);
 }
 
 static int	dongle_ready(t_dongle *dongle, long long now)

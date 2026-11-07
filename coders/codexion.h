@@ -6,7 +6,7 @@
 /*   By: anasufi <anasufi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/18 06:52:40 by anasufi           #+#    #+#             */
-/*   Updated: 2026/11/06 23:38:14 by anasufi          ###   ########.fr       */
+/*   Updated: 2026/11/07 01:34:06 by anasufi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@ typedef struct s_coordinator
 {
 	pthread_mutex_t	mutex;
 	t_dongle		*dongles;
+	t_heap			waiting;
+	unsigned long	next_arrival;
 }					t_coordinator;
 
 typedef struct s_coder
@@ -100,7 +102,8 @@ int					is_valid_scheduler(const char *str);
 int					init_dongles(t_dongle *dongles, int count);
 void				destroy_dongles(t_dongle *dongles, int count);
 t_dongle			*alloc_dongles(int count);
-int					init_coordinator(t_coordinator *coord, t_dongle *dongles);
+int					init_coordinator(t_coordinator *coord, t_dongle *dongles,
+						t_config *config);
 void				destroy_coordinator(t_coordinator *coord);
 long long			get_time_ms(void);
 int					reserve_pair(t_coordinator *coord, int left, int right);
@@ -108,5 +111,7 @@ int					release_pair(t_coordinator *coord, int left, int right,
 						int cooldown_ms);
 int					init_simulation(t_simulation *sim, t_config *config);
 void				destroy_simulation(t_simulation *sim);
+int					submit_request(t_coordinator *coord, int coder_id,
+						long long deadline);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: anasufi <anasufi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/06 23:24:42 by anasufi           #+#    #+#             */
-/*   Updated: 2026/11/06 23:35:27 by anasufi          ###   ########.fr       */
+/*   Updated: 2026/11/07 01:23:15 by anasufi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	init_simulation(t_simulation *sim, t_config *config)
 		free(sim->coders);
 		return (1);
 	}
-	if (init_coordinator(&sim->coord, sim->dongles) != 0)
+	if (init_coordinator(&sim->coord, sim->dongles, config) != 0)
 	{
 		destroy_dongles(sim->dongles, config->number_of_coders);
 		free(sim->dongles);
