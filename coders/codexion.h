@@ -6,7 +6,7 @@
 /*   By: anasufi <anasufi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/18 06:52:40 by anasufi           #+#    #+#             */
-/*   Updated: 2026/11/07 01:34:06 by anasufi          ###   ########.fr       */
+/*   Updated: 2026/11/11 07:29:14 by anasufi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,11 @@ typedef struct s_dongle
 typedef struct s_coordinator
 {
 	pthread_mutex_t	mutex;
+	pthread_cond_t	changed;
 	t_dongle		*dongles;
 	t_heap			waiting;
 	unsigned long	next_arrival;
+	int				coder_count;
 }					t_coordinator;
 
 typedef struct s_coder
@@ -113,5 +115,6 @@ int					init_simulation(t_simulation *sim, t_config *config);
 void				destroy_simulation(t_simulation *sim);
 int					submit_request(t_coordinator *coord, int coder_id,
 						long long deadline);
+int					try_grant_next(t_coordinator *coord, t_request *granted);
 
 #endif

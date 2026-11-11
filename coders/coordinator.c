@@ -6,12 +6,24 @@
 /*   By: anasufi <anasufi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/02 23:29:16 by anasufi           #+#    #+#             */
-/*   Updated: 2026/11/07 01:21:24 by anasufi          ###   ########.fr       */
+/*   Updated: 2026/11/11 08:15:31 by anasufi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
 #include <stdlib.h>
+
+static int	init_coord_sync(t_coordinator *coord)
+{
+	if (pthread_mutex_init(&coord->mutex, NULL) != 0)
+		return (1);
+	if (pthread_cond_init(&coord->changed, NULL) != 0)
+	{
+		pthread_mutex_destroy(&coord->mutex);
+		return (1);
+	}
+	return (0);
+}
 
 int	init_coordinator(t_coordinator *coord, t_dongle *dongles, t_config *config)
 {
@@ -21,9 +33,10 @@ int	init_coordinator(t_coordinator *coord, t_dongle *dongles, t_config *config)
 	coord->waiting.scheduler = config->scheduler;
 	coord->next_arrival = 0;
 	coord->waiting.items = malloc(sizeof(t_request) * config->number_of_coders);
+	coord->coder_count = config->number_of_coders;
 	if (!coord->waiting.items)
 		return (1);
-	if (pthread_mutex_init(&coord->mutex, NULL) != 0)
+	if (init_coord_sync(coord) != 0)
 	{
 		free(coord->waiting.items);
 		return (1);
@@ -33,56 +46,7 @@ int	init_coordinator(t_coordinator *coord, t_dongle *dongles, t_config *config)
 
 void	destroy_coordinator(t_coordinator *coord)
 {
+	pthread_cond_destroy(&coord->changed);
 	pthread_mutex_destroy(&coord->mutex);
 	free(coord->waiting.items);
-}
-
-static int	dongle_ready(t_dongle *dongle, long long now)
-{
-	return (!dongle->in_use && now >= dongle->cooldown_until);
-}
-
-int	reserve_pair(t_coordinator *coord, int left, int right)
-{
-	long long	now;
-	int			success;
-
-	if (left == right)
-		return (0);
-	if (pthread_mutex_lock(&coord->mutex) != 0)
-		return (0);
-	success = 0;
-	now = get_time_ms();
-	if (now >= 0 && dongle_ready(&coord->dongles[left], now)
-		&& dongle_ready(&coord->dongles[right], now))
-	{
-		coord->dongles[left].in_use = 1;
-		coord->dongles[right].in_use = 1;
-		success = 1;
-	}
-	pthread_mutex_unlock(&coord->mutex);
-	return (success);
-}
-
-int	release_pair(t_coordinator *coord, int left, int right, int cooldown_ms)
-{
-	long long	now;
-
-	if (left == right)
-		return (1);
-	if (pthread_mutex_lock(&coord->mutex) != 0)
-		return (1);
-	now = get_time_ms();
-	if (now < 0)
-	{
-		pthread_mutex_unlock(&coord->mutex);
-		return (1);
-	}
-	coord->dongles[left].cooldown_until = now + cooldown_ms;
-	coord->dongles[right].cooldown_until = now + cooldown_ms;
-	coord->dongles[left].in_use = 0;
-	coord->dongles[right].in_use = 0;
-	if (pthread_mutex_unlock(&coord->mutex) != 0)
-		return (1);
-	return (0);
 }
