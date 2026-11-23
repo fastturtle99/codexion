@@ -6,7 +6,7 @@
 /*   By: anasufi <anasufi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/03 18:06:19 by anasufi           #+#    #+#             */
-/*   Updated: 2026/11/03 18:12:19 by anasufi          ###   ########.fr       */
+/*   Updated: 2026/11/11 08:42:50 by anasufi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,4 +21,10 @@ long long	get_time_ms(void)
 	if (gettimeofday(&time, NULL) != 0)
 		return (-1);
 	return ((long long)time.tv_sec * 1000 + time.tv_usec / 1000);
+}
+
+void	ms_to_timespec(long long ms, struct timespec *ts)
+{
+	ts->tv_sec = ms / 1000;
+	ts->tv_nsec = (ms % 1000) * 1000000L;
 }

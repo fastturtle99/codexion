@@ -6,7 +6,7 @@
 #    By: anasufi <anasufi@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/10/18 07:01:36 by anasufi           #+#    #+#              #
-#    Updated: 2026/11/11 08:16:43 by anasufi          ###   ########.fr        #
+#    Updated: 2026/11/14 06:44:38 by anasufi          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,7 +30,8 @@ SRC = main.c \
 	  time_utils.c \
 	  simulation.c \
 	  requests.c \
-	  scheduler_grant.c
+	  scheduler_grant.c \
+	  scheduler_wait.c
 
 OBJ = $(SRC:.c=.o)
 

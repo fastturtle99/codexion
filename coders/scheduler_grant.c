@@ -6,7 +6,7 @@
 /*   By: anasufi <anasufi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/10 07:46:38 by anasufi           #+#    #+#             */
-/*   Updated: 2026/11/10 07:47:00 by anasufi          ###   ########.fr       */
+/*   Updated: 2026/11/12 08:27:46 by anasufi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,15 @@ static int	pair_ready(t_coordinator *coord, int left, int right, long long now)
 		return (0);
 	return (!d[left].in_use && !d[right].in_use && now >= d[left].cooldown_until
 		&& now >= d[right].cooldown_until);
+}
+
+static void	mark_granted(t_coordinator *coord, int left, int right,
+		int coder_id)
+{
+	coord->dongles[left].in_use = 1;
+	coord->dongles[right].in_use = 1;
+	coord->granted[coder_id - 1] = 1;
+	pthread_cond_broadcast(&coord->changed);
 }
 
 static int	grant_head(t_coordinator *coord, t_request *out, long long now)
@@ -38,8 +47,7 @@ static int	grant_head(t_coordinator *coord, t_request *out, long long now)
 		return (0);
 	if (heap_pop(&coord->waiting, out) != 0)
 		return (-1);
-	coord->dongles[left].in_use = 1;
-	coord->dongles[right].in_use = 1;
+	mark_granted(coord, left, right, out->coder_id);
 	return (1);
 }
 

@@ -6,7 +6,7 @@
 /*   By: anasufi <anasufi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/31 06:06:03 by anasufi           #+#    #+#             */
-/*   Updated: 2026/11/06 23:41:53 by anasufi          ###   ########.fr       */
+/*   Updated: 2026/11/23 16:34:40 by anasufi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,20 +17,19 @@
 
 static void	*coder_routine(void *arg)
 {
-	t_coder	*coder;
+	t_coder		*coder;
+	long long	deadline;
 
 	coder = (t_coder *)arg;
-	if (!reserve_pair(coder->coordinator, coder->left_index,
-			coder->right_index))
-	{
-		printf("Coder %d: dongles unavailable\n", coder->id);
-		return (NULL);
-	}
-	printf("Coder %d reserved D%d and D%d\n", coder->id, coder->left_index,
-		coder->right_index);
+	deadline = coder->coordinator->start_ms + coder->config->time_to_burnout;
+	if (submit_request(coder->coordinator, coder->id, deadline) != 0)
+		return (printf("Coder %d: request failed\n", coder->id), NULL);
+	printf("Coder %d submitted a request\n", coder->id);
+	if (wait_for_grant(coder, deadline) != 0)
+		return (printf("Coder %d: wait failed\n", coder->id), NULL);
+	printf("Coder %d received its dongles\n", coder->id);
 	usleep(50000);
-	if (release_pair(coder->coordinator, coder->left_index, coder->right_index,
-			coder->config->dongle_cooldown) != 0)
+	if (release_pair(coder))
 		printf("Coder %d: release failed\n", coder->id);
 	else
 		printf("Coder %d released its dongles\n", coder->id);
@@ -90,6 +89,12 @@ int	start_coders(t_config *config)
 
 	if (init_simulation(&sim, config) != 0)
 		return (1);
+	sim.coord.start_ms = get_time_ms();
+	if (sim.coord.start_ms < 0)
+	{
+		destroy_simulation(&sim);
+		return (1);
+	}
 	created = create_coders(sim.coders, sim.config, sim.dongles, &sim.coord);
 	failed = join_coders(sim.coders, created);
 	if (!failed)

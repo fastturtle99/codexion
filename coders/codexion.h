@@ -6,7 +6,7 @@
 /*   By: anasufi <anasufi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/18 06:52:40 by anasufi           #+#    #+#             */
-/*   Updated: 2026/11/11 07:29:14 by anasufi          ###   ########.fr       */
+/*   Updated: 2026/11/23 17:06:10 by anasufi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define CODEXION_H
 
 # include <pthread.h>
+# include <time.h>
 
 typedef struct s_request
 {
@@ -63,7 +64,9 @@ typedef struct s_coordinator
 	t_dongle		*dongles;
 	t_heap			waiting;
 	unsigned long	next_arrival;
+	long long		start_ms;
 	int				coder_count;
+	int				*granted;
 }					t_coordinator;
 
 typedef struct s_coder
@@ -109,12 +112,13 @@ int					init_coordinator(t_coordinator *coord, t_dongle *dongles,
 void				destroy_coordinator(t_coordinator *coord);
 long long			get_time_ms(void);
 int					reserve_pair(t_coordinator *coord, int left, int right);
-int					release_pair(t_coordinator *coord, int left, int right,
-						int cooldown_ms);
+int					release_pair(t_coder *coder);
 int					init_simulation(t_simulation *sim, t_config *config);
 void				destroy_simulation(t_simulation *sim);
 int					submit_request(t_coordinator *coord, int coder_id,
 						long long deadline);
 int					try_grant_next(t_coordinator *coord, t_request *granted);
+void				ms_to_timespec(long long ms, struct timespec *ts);
+int					wait_for_grant(t_coder *coder, long long deadline);
 
 #endif
