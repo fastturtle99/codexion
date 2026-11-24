@@ -6,7 +6,7 @@
 /*   By: anasufi <anasufi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/02 23:29:16 by anasufi           #+#    #+#             */
-/*   Updated: 2026/11/12 08:27:13 by anasufi          ###   ########.fr       */
+/*   Updated: 2026/11/24 16:19:47 by anasufi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@ int	init_coordinator(t_coordinator *coord, t_dongle *dongles, t_config *config)
 	coord->waiting.scheduler = config->scheduler;
 	coord->next_arrival = 0;
 	coord->coder_count = config->number_of_coders;
+	coord->stopped = 0;
+	coord->burned_out_id = 0;
 	if (init_coord_buffers(coord) != 0)
 		return (1);
 	if (init_coord_sync(coord) != 0)

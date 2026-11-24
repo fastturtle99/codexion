@@ -6,7 +6,7 @@
 /*   By: anasufi <anasufi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/18 06:52:40 by anasufi           #+#    #+#             */
-/*   Updated: 2026/11/23 17:06:10 by anasufi          ###   ########.fr       */
+/*   Updated: 2026/11/24 16:23:44 by anasufi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,8 @@ typedef struct s_coordinator
 	long long		start_ms;
 	int				coder_count;
 	int				*granted;
+	int				stopped;
+	int				burned_out_id;
 }					t_coordinator;
 
 typedef struct s_coder
@@ -78,6 +80,8 @@ typedef struct s_coder
 	t_coordinator	*coordinator;
 	int				left_index;
 	int				right_index;
+	int				compiles_done;
+	long long		last_compile_start;
 }					t_coder;
 
 typedef struct s_simulation
@@ -120,5 +124,9 @@ int					submit_request(t_coordinator *coord, int coder_id,
 int					try_grant_next(t_coordinator *coord, t_request *granted);
 void				ms_to_timespec(long long ms, struct timespec *ts);
 int					wait_for_grant(t_coder *coder, long long deadline);
+void				sleep_ms(int ms);
+int					perform_compile(t_coder *coder);
+int					run_coder_cycle(t_coder *coder);
+int					stop_simulation(t_coordinator *coord, int coder_id);
 
 #endif

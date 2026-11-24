@@ -6,7 +6,7 @@
 /*   By: anasufi <anasufi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/31 06:06:03 by anasufi           #+#    #+#             */
-/*   Updated: 2026/11/23 16:34:40 by anasufi          ###   ########.fr       */
+/*   Updated: 2026/11/23 19:33:16 by anasufi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,22 +17,18 @@
 
 static void	*coder_routine(void *arg)
 {
-	t_coder		*coder;
-	long long	deadline;
+	t_coder	*coder;
 
 	coder = (t_coder *)arg;
-	deadline = coder->coordinator->start_ms + coder->config->time_to_burnout;
-	if (submit_request(coder->coordinator, coder->id, deadline) != 0)
-		return (printf("Coder %d: request failed\n", coder->id), NULL);
-	printf("Coder %d submitted a request\n", coder->id);
-	if (wait_for_grant(coder, deadline) != 0)
-		return (printf("Coder %d: wait failed\n", coder->id), NULL);
-	printf("Coder %d received its dongles\n", coder->id);
-	usleep(50000);
-	if (release_pair(coder))
-		printf("Coder %d: release failed\n", coder->id);
-	else
-		printf("Coder %d released its dongles\n", coder->id);
+	coder->compiles_done = 0;
+	while (coder->compiles_done < coder->config->number_of_compiles_required)
+	{
+		if (run_coder_cycle(coder))
+		{
+			printf("Coder %d: cycle failed\n", coder->id);
+			return (NULL);
+		}
+	}
 	return (NULL);
 }
 
@@ -49,6 +45,7 @@ static int	create_coders(t_coder *coders, t_config *config, t_dongle *dongles,
 		coders[i].dongles = dongles;
 		coders[i].coordinator = coord;
 		coders[i].right_index = i;
+		coders[i].last_compile_start = coord->start_ms;
 		if (i == 0)
 			coders[i].left_index = config->number_of_coders - 1;
 		else

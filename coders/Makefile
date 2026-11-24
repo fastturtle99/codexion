@@ -6,7 +6,7 @@
 #    By: anasufi <anasufi@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/10/18 07:01:36 by anasufi           #+#    #+#              #
-#    Updated: 2026/11/14 06:44:38 by anasufi          ###   ########.fr        #
+#    Updated: 2026/11/24 16:24:07 by anasufi          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,6 +24,7 @@ SRC = main.c \
       parsing.c \
       config.c \
 	  coder.c \
+	  coder_compile.c \
 	  dongles.c \
 	  coordinator.c \
 	  coordinator_pairs.c \
@@ -31,7 +32,9 @@ SRC = main.c \
 	  simulation.c \
 	  requests.c \
 	  scheduler_grant.c \
-	  scheduler_wait.c
+	  scheduler_wait.c \
+	  coder_cycle.c \
+	  coordinator_stop.c \
 
 OBJ = $(SRC:.c=.o)
 
