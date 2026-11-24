@@ -6,7 +6,7 @@
 /*   By: anasufi <anasufi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/18 06:52:40 by anasufi           #+#    #+#             */
-/*   Updated: 2026/11/24 16:23:44 by anasufi          ###   ########.fr       */
+/*   Updated: 2026/11/24 16:57:06 by anasufi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,5 +128,6 @@ void				sleep_ms(int ms);
 int					perform_compile(t_coder *coder);
 int					run_coder_cycle(t_coder *coder);
 int					stop_simulation(t_coordinator *coord, int coder_id);
+int					check_burnout(t_simulation *sim);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: anasufi <anasufi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/14 06:38:05 by anasufi           #+#    #+#             */
-/*   Updated: 2026/11/23 16:12:34 by anasufi          ###   ########.fr       */
+/*   Updated: 2026/11/24 16:39:33 by anasufi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,9 @@ static int	wait_once(t_coder *coder, long long deadline)
 	c = coder->coordinator;
 	if (pthread_mutex_lock(&c->mutex) != 0)
 		return (-1);
-	if (c->granted[coder->id - 1])
+	if (c->stopped)
+		result = -1;
+	else if (c->granted[coder->id - 1])
 		result = 1;
 	else
 		result = wait_until_change(c, deadline);
@@ -89,6 +91,10 @@ int	wait_for_grant(t_coder *coder, long long deadline)
 		if (result == 1)
 			return (0);
 		if (result < 0)
+		{
+			if (get_time_ms() >= deadline)
+				stop_simulation(coder->coordinator, coder->id);
 			return (1);
+		}
 	}
 }

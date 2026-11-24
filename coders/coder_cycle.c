@@ -6,7 +6,7 @@
 /*   By: anasufi <anasufi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/23 19:27:22 by anasufi           #+#    #+#             */
-/*   Updated: 2026/11/23 19:27:26 by anasufi          ###   ########.fr       */
+/*   Updated: 2026/11/24 16:48:31 by anasufi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,19 @@ static void	debug_and_refactor(t_coder *coder)
 	sleep_ms(coder->config->time_to_debug);
 	printf("Coder %d is refactoring\n", coder->id);
 	sleep_ms(coder->config->time_to_refactor);
+}
+
+static int	record_compile(t_coder *coder)
+{
+	t_coordinator	*coord;
+
+	coord = coder->coordinator;
+	if (pthread_mutex_lock(&coord->mutex) != 0)
+		return (1);
+	coder->compiles_done++;
+	if (pthread_mutex_unlock(&coord->mutex) != 0)
+		return (1);
+	return (0);
 }
 
 int	run_coder_cycle(t_coder *coder)
@@ -38,7 +51,8 @@ int	run_coder_cycle(t_coder *coder)
 	release_result = release_pair(coder);
 	if (compile_result || release_result)
 		return (1);
-	coder->compiles_done++;
+	if (record_compile(coder))
+		return (1);
 	printf("Coder %d released its dongles\n", coder->id);
 	if (coder->compiles_done < coder->config->number_of_compiles_required)
 		debug_and_refactor(coder);

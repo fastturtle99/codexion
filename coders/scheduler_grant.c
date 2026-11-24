@@ -6,7 +6,7 @@
 /*   By: anasufi <anasufi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/10 07:46:38 by anasufi           #+#    #+#             */
-/*   Updated: 2026/11/12 08:27:46 by anasufi          ###   ########.fr       */
+/*   Updated: 2026/11/24 16:34:38 by anasufi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,8 @@ int	try_grant_next(t_coordinator *coord, t_request *granted)
 	now = get_time_ms();
 	if (now < 0)
 		result = -1;
+	else if (coord->stopped)
+		result = grant_head(coord, granted, now);
 	else
 		result = grant_head(coord, granted, now);
 	if (pthread_mutex_unlock(&coord->mutex) != 0)

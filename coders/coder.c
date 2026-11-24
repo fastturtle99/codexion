@@ -6,7 +6,7 @@
 /*   By: anasufi <anasufi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/31 06:06:03 by anasufi           #+#    #+#             */
-/*   Updated: 2026/11/23 19:33:16 by anasufi          ###   ########.fr       */
+/*   Updated: 2026/11/24 16:51:57 by anasufi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ static void	*coder_routine(void *arg)
 	t_coder	*coder;
 
 	coder = (t_coder *)arg;
-	coder->compiles_done = 0;
 	while (coder->compiles_done < coder->config->number_of_compiles_required)
 	{
 		if (run_coder_cycle(coder))
@@ -46,6 +45,7 @@ static int	create_coders(t_coder *coders, t_config *config, t_dongle *dongles,
 		coders[i].coordinator = coord;
 		coders[i].right_index = i;
 		coders[i].last_compile_start = coord->start_ms;
+		coders[i].compiles_done = 0;
 		if (i == 0)
 			coders[i].left_index = config->number_of_coders - 1;
 		else
