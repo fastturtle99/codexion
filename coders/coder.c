@@ -6,7 +6,7 @@
 /*   By: anasufi <anasufi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/31 06:06:03 by anasufi           #+#    #+#             */
-/*   Updated: 2026/11/24 16:51:57 by anasufi          ###   ########.fr       */
+/*   Updated: 2026/11/25 07:44:39 by anasufi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ static void	*coder_routine(void *arg)
 	{
 		if (run_coder_cycle(coder))
 		{
+			stop_simulation(coder->coordinator, 0);
 			printf("Coder %d: cycle failed\n", coder->id);
 			return (NULL);
 		}
@@ -78,11 +79,30 @@ static int	join_coders(t_coder *coders, int count)
 	return (failed);
 }
 
+static int	finish_simulation(t_simulation *sim, int created, int monitor_ok)
+{
+	int	join_failed;
+	int	result;
+
+	if (!monitor_ok)
+		stop_simulation(&sim->coord, 0);
+	join_failed = join_coders(sim->coders, created);
+	if (monitor_ok && pthread_join(sim->monitor_thread, NULL) != 0)
+		join_failed = 1;
+	result = 1;
+	if (!join_failed)
+	{
+		result = (sim->coord.stopped || !monitor_ok);
+		destroy_simulation(sim);
+	}
+	return (result);
+}
+
 int	start_coders(t_config *config)
 {
 	t_simulation	sim;
 	int				created;
-	int				failed;
+	int				monitor_ok;
 
 	if (init_simulation(&sim, config) != 0)
 		return (1);
@@ -93,8 +113,9 @@ int	start_coders(t_config *config)
 		return (1);
 	}
 	created = create_coders(sim.coders, sim.config, sim.dongles, &sim.coord);
-	failed = join_coders(sim.coders, created);
-	if (!failed)
-		destroy_simulation(&sim);
-	return (created != config->number_of_coders || failed);
+	monitor_ok = 0;
+	if (created == config->number_of_coders)
+		monitor_ok = (pthread_create(&sim.monitor_thread, NULL, monitor_routine,
+					&sim) == 0);
+	return (finish_simulation(&sim, created, monitor_ok));
 }
