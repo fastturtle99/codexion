@@ -6,7 +6,7 @@
 #    By: anasufi <anasufi@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/10/18 07:01:36 by anasufi           #+#    #+#              #
-#    Updated: 2026/11/25 07:31:06 by anasufi          ###   ########.fr        #
+#    Updated: 2026/11/25 16:51:48 by anasufi          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,6 +37,7 @@ SRC = main.c \
 	  coordinator_stop.c \
 	  monitor.c \
 	  monitor_thread.c \
+	  coder_sleep.c \
 
 OBJ = $(SRC:.c=.o)
 

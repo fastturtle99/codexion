@@ -6,7 +6,7 @@
 /*   By: anasufi <anasufi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/07 01:33:52 by anasufi           #+#    #+#             */
-/*   Updated: 2026/11/07 01:33:56 by anasufi          ###   ########.fr       */
+/*   Updated: 2026/11/26 19:04:52 by anasufi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,10 @@ int	submit_request(t_coordinator *coord, int coder_id, long long deadline)
 
 	if (pthread_mutex_lock(&coord->mutex) != 0)
 		return (1);
+	if (coord->stopped)
+	{
+		return (pthread_mutex_unlock(&coord->mutex), 1);
+	}
 	now = get_time_ms();
 	result = 1;
 	if (now >= 0)

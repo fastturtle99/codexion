@@ -6,11 +6,12 @@
 /*   By: anasufi <anasufi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/24 16:54:32 by anasufi           #+#    #+#             */
-/*   Updated: 2026/11/24 16:54:42 by anasufi          ###   ########.fr       */
+/*   Updated: 2026/11/25 17:18:23 by anasufi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
+#include <stdio.h>
 
 static int	find_expired_coder(t_simulation *sim, long long now)
 {
@@ -33,6 +34,7 @@ static int	mark_burnout(t_coordinator *coord, int id)
 {
 	coord->stopped = 1;
 	coord->burned_out_id = id;
+	printf("Coder %d burned out\n", id);
 	if (pthread_cond_broadcast(&coord->changed) != 0)
 		return (-1);
 	return (id);

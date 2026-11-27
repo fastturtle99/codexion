@@ -6,7 +6,7 @@
 /*   By: anasufi <anasufi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/31 06:06:03 by anasufi           #+#    #+#             */
-/*   Updated: 2026/11/25 07:44:39 by anasufi          ###   ########.fr       */
+/*   Updated: 2026/11/25 17:23:11 by anasufi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,19 @@
 static void	*coder_routine(void *arg)
 {
 	t_coder	*coder;
+	int		stopped;
 
 	coder = (t_coder *)arg;
 	while (coder->compiles_done < coder->config->number_of_compiles_required)
 	{
 		if (run_coder_cycle(coder))
 		{
-			stop_simulation(coder->coordinator, 0);
-			printf("Coder %d: cycle failed\n", coder->id);
+			stopped = coder_stopped(coder);
+			if (stopped != 1)
+			{
+				stop_simulation(coder->coordinator, 0);
+				printf("Coder %d: cycle error\n", coder->id);
+			}
 			return (NULL);
 		}
 	}

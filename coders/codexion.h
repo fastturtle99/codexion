@@ -6,7 +6,7 @@
 /*   By: anasufi <anasufi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/18 06:52:40 by anasufi           #+#    #+#             */
-/*   Updated: 2026/11/25 07:30:37 by anasufi          ###   ########.fr       */
+/*   Updated: 2026/11/27 07:38:27 by anasufi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,5 +131,8 @@ int					run_coder_cycle(t_coder *coder);
 int					stop_simulation(t_coordinator *coord, int coder_id);
 int					check_burnout(t_simulation *sim);
 void				*monitor_routine(void *arg);
+int					coder_stopped(t_coder *coder);
+int					coder_sleep(t_coder *coder, int ms);
+int					requests_conflict(int first_id, int second_id, int count);
 
 #endif
