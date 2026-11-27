@@ -6,7 +6,7 @@
 #    By: anasufi <anasufi@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/10/18 07:01:36 by anasufi           #+#    #+#              #
-#    Updated: 2026/11/25 16:51:48 by anasufi          ###   ########.fr        #
+#    Updated: 2026/11/27 08:16:57 by anasufi          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,6 +38,10 @@ SRC = main.c \
 	  monitor.c \
 	  monitor_thread.c \
 	  coder_sleep.c \
+	  scheduler_priority.c \
+	  scheduler_select.c \
+	  scheduler_conflict.c \
+	  request_heap_remove.c \
 
 OBJ = $(SRC:.c=.o)
 

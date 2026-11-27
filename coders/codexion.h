@@ -6,7 +6,7 @@
 /*   By: anasufi <anasufi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/18 06:52:40 by anasufi           #+#    #+#             */
-/*   Updated: 2026/11/27 07:38:27 by anasufi          ###   ########.fr       */
+/*   Updated: 2026/11/27 08:16:44 by anasufi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,5 +134,11 @@ void				*monitor_routine(void *arg);
 int					coder_stopped(t_coder *coder);
 int					coder_sleep(t_coder *coder, int ms);
 int					requests_conflict(int first_id, int second_id, int count);
+int					blocked_by_prior_request(t_coordinator *coord,
+						t_request candidate);
+int					pair_ready(t_coordinator *coord, int left, int right,
+						long long now);
+int					find_eligible_index(t_coordinator *coord, long long now);
+int					heap_remove_at(t_heap *heap, int index, t_request *out);
 
 #endif

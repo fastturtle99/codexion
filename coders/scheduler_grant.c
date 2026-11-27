@@ -6,14 +6,14 @@
 /*   By: anasufi <anasufi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/10 07:46:38 by anasufi           #+#    #+#             */
-/*   Updated: 2026/11/26 19:14:20 by anasufi          ###   ########.fr       */
+/*   Updated: 2026/11/27 08:04:15 by anasufi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
 #include <stdio.h>
 
-static int	pair_ready(t_coordinator *coord, int left, int right, long long now)
+int	pair_ready(t_coordinator *coord, int left, int right, long long now)
 {
 	t_dongle	*d;
 
